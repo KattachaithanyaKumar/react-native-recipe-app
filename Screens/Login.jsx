@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import React from "react";
@@ -36,14 +37,14 @@ const Login = () => {
         />
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+        <Pressable style={styles.button} onPress={handleLoginPress}>
           <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        </Pressable>
         <View style={styles.goto}>
           <Text style={styles.gotoText}>Don't have any account?</Text>
-          <TouchableOpacity onPress={HandleSignupPress}>
+          <Pressable onPress={HandleSignupPress}>
             <Text>Sign Up</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>

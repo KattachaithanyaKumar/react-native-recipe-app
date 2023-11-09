@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
@@ -30,14 +31,14 @@ const Signup = () => {
         />
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.button}>
+        <Pressable style={styles.button}>
           <Text style={styles.buttonText}>SignUp</Text>
-        </TouchableOpacity>
+        </Pressable>
         <View style={styles.goto}>
           <Text style={styles.gotoText}>Already have an account?</Text>
-          <TouchableOpacity>
+          <Pressable>
             <Text>Login</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>

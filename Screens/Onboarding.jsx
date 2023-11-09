@@ -4,6 +4,7 @@ import {
   View,
   ImageBackground,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -27,13 +28,13 @@ const Onboarding = () => {
           Let’s join our community to cook better food!
         </Text>
 
-        <TouchableOpacity
+        <Pressable
           style={styles.button}
           activeOpacity={0.8}
           onPress={handlePress}
         >
           <Text style={styles.buttonText}>Start Cooking {"->"}</Text>
-        </TouchableOpacity>
+        </Pressable>
       </ImageBackground>
     </View>
   );
