@@ -11,6 +11,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AnimatedLoader from "react-native-animated-loader";
 
+import CategoryCard from "../Components/CategoryCard";
+
 const Home = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,14 +61,15 @@ const Home = () => {
           </View>
         </View>
 
+        <Text style={styles.subheading}>Popular Categories</Text>
         {loading ? (
-          <Text>Loading...</Text>
+          <Text style={styles.loading}>Loading...</Text>
         ) : (
-          <View>
+          <ScrollView horizontal style={styles.categoriesList}>
             {categoriesData?.map((category, index) => (
-              <Text key={index}>{category.strCategory}</Text>
+              <CategoryCard key={index} data={category} />
             ))}
-          </View>
+          </ScrollView>
         )}
       </ScrollView>
       {/* <AnimatedLoader
@@ -95,6 +98,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  subheading: {
+    fontSize: 20,
+    fontWeight: "600",
+    paddingLeft: 24,
+  },
   titleYellow: {
     color: "#EEAF0E",
   },
@@ -112,5 +120,16 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 2,
     marginLeft: 8,
+  },
+  categoriesList: {
+    // backgroundColor: "red",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  loading: {
+    textAlign: "center",
+    marginTop: 64,
+    fontSize: 18,
+    fontWeight: "400",
   },
 });
