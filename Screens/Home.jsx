@@ -1,5 +1,6 @@
 import {
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,13 +10,15 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import AnimatedLoader from "react-native-animated-loader";
+import { useNavigation } from "@react-navigation/native";
 
 import CategoryCard from "../Components/CategoryCard";
 
 const Home = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation();
 
   const fetchCategories = async () => {
     try {
@@ -67,18 +70,18 @@ const Home = () => {
         ) : (
           <ScrollView horizontal style={styles.categoriesList}>
             {categoriesData?.map((category, index) => (
-              <CategoryCard key={index} data={category} />
+              <Pressable
+                key={index}
+                onPress={() => {
+                  navigation.navigate("CategoryScreen", { category });
+                }}
+              >
+                <CategoryCard data={category} />
+              </Pressable>
             ))}
           </ScrollView>
         )}
       </ScrollView>
-      {/* <AnimatedLoader
-        visible={loading}
-        overlayColor="rgba(0,0,0,0.75)"
-        animationStyle={styles.lottie}
-        source={require("../assets/loader.json")}
-        speed={1}
-      /> */}
     </SafeAreaView>
   );
 };

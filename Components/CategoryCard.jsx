@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 12,
     borderRadius: 16,
+    // paddingRight: 24,
     // aspectRatio: 1,
     // resizeMode: "contain",
   },
