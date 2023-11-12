@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 const CategoryScreen = ({ route }) => {
   const [categoryName, setCategoryName] = useState(
@@ -16,13 +17,15 @@ const CategoryScreen = ({ route }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const navigation = useNavigation();
+
   const fetchData = async () => {
     setLoading(true);
     const res = await fetch(
       `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`
     );
     const data = await res.json();
-    // console.log(data);
+    console.log(data);
     setData(data.meals);
     setLoading(false);
   };
@@ -36,10 +39,11 @@ const CategoryScreen = ({ route }) => {
       style={styles.item}
       onPress={() => {
         console.log(item.strMeal);
+        navigation.navigate("MealDetails", { mealID: item.idMeal });
       }}
     >
       <Image source={{ uri: item.strMealThumb }} style={styles.image} />
-      <Text style={styles.text}>{item.strMeal}</Text>
+      {/* <Text style={styles.text}>{item.strMeal}</Text> */}
     </Pressable>
   );
 
@@ -78,11 +82,12 @@ const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 8,
     overflow: "hidden",
-    backgroundColor: "white",
-    elevation: 5,
+    // backgroundColor: "white",
+    aspectRatio: 0.75,
   },
   image: {
     height: 200,
+    borderRadius: 8,
   },
   text: {
     padding: 8,

@@ -14,7 +14,7 @@ export default CategoryCard;
 
 const styles = StyleSheet.create({
   card: {
-    marginRight: 24,
+    // marginRight: 24,
     // backgroundColor: "#EEAF0E",
     // borderColor: "#eeaf0e",
     // borderWidth: 1,

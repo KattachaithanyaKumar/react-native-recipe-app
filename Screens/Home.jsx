@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   categoriesList: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    padding: 32,
+    // padding: 32,
     // backgroundColor: "red",
   },
   loading: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     overflow: "hidden",
     marginBottom: 160,
-    elevation: 5,
+    elevation: 3,
   },
   randomImage: {
     width: "100%",
