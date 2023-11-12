@@ -5,7 +5,7 @@ const CategoryCard = ({ data }) => {
   return (
     <View style={styles.card}>
       <Image source={{ uri: data.strCategoryThumb }} style={styles.image} />
-      <Text>{data.strCategory}</Text>
+      <Text style={styles.text}>{data.strCategory}</Text>
     </View>
   );
 };
@@ -15,18 +15,23 @@ export default CategoryCard;
 const styles = StyleSheet.create({
   card: {
     marginRight: 24,
-    backgroundColor: "#EEAF0E",
+    // backgroundColor: "#EEAF0E",
+    // borderColor: "#eeaf0e",
+    // borderWidth: 1,
+    backgroundColor: "white",
     alignItems: "center",
     padding: 12,
     borderRadius: 16,
-    // paddingRight: 24,
-    // aspectRatio: 1,
-    // resizeMode: "contain",
+    elevation: 5,
+    marginVertical: 12,
+    marginHorizontal: 8,
   },
   image: {
-    width: 64,
-    height: 64,
+    height: 80,
     aspectRatio: 1,
     resizeMode: "contain",
+  },
+  text: {
+    fontWeight: "400",
   },
 });

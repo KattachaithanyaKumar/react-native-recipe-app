@@ -22,7 +22,7 @@ const CategoryScreen = ({ route }) => {
       `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`
     );
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     setData(data.meals);
     setLoading(false);
   };
@@ -78,9 +78,10 @@ const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 8,
     overflow: "hidden",
+    backgroundColor: "white",
+    elevation: 5,
   },
   image: {
-    // width: "100%",
     height: 200,
   },
   text: {
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
   },
   list: {
-    // padding: 16,
     marginBottom: 100,
     paddingTop: 0,
   },

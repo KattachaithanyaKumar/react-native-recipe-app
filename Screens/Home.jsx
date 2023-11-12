@@ -17,6 +17,7 @@ import CategoryCard from "../Components/CategoryCard";
 const Home = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [randomMeal, setRandomMeal] = useState([]);
 
   const navigation = useNavigation();
 
@@ -24,14 +25,27 @@ const Home = () => {
     try {
       setLoading(true);
       console.clear();
-      // console.log(
-      //   "============================Fetching categories============================"
-      // );
       const res = await fetch(
         "https://www.themealdb.com/api/json/v1/1/categories.php"
       );
       const data = await res.json();
       setCategoriesData(data.categories);
+      // console.log(data.categories);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchRandomMeal = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        "https://www.themealdb.com/api/json/v1/1/random.php"
+      );
+      const data = await res.json();
+      // console.log(data.meals);
+      setRandomMeal(data.meals);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -40,6 +54,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchCategories();
+    fetchRandomMeal();
   }, []);
 
   const handlePressEnter = () => {
@@ -47,7 +62,7 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.screen}>
       <ScrollView style={styles.screen}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>
@@ -81,6 +96,25 @@ const Home = () => {
             ))}
           </ScrollView>
         )}
+
+        <Text style={styles.subheading}>Random Meal</Text>
+        <View>
+          {randomMeal?.map((meal, index) => (
+            <Pressable
+              key={index}
+              style={styles.randomMeal}
+              onPress={() => {
+                navigation.navigate("MealDetails", { mealID: meal.idMeal });
+              }}
+            >
+              <Image
+                source={{ uri: meal.strMealThumb }}
+                style={styles.randomImage}
+              />
+              <Text style={styles.randomText}>{meal.strMeal}</Text>
+            </Pressable>
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -89,12 +123,15 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "white",
+  },
   lottie: {
     width: 100,
     height: 100,
   },
   titleBox: {
-    // backgroundColor: "red",
     padding: 24,
   },
   title: {
@@ -125,14 +162,35 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   categoriesList: {
-    // backgroundColor: "red",
     paddingHorizontal: 24,
     paddingVertical: 12,
+    padding: 32,
+    // backgroundColor: "red",
   },
   loading: {
     textAlign: "center",
     marginTop: 64,
     fontSize: 18,
     fontWeight: "400",
+  },
+  randomMeal: {
+    margin: 24,
+    marginTop: 12,
+    borderRadius: 24,
+    backgroundColor: "white",
+    overflow: "hidden",
+    marginBottom: 160,
+    elevation: 5,
+  },
+  randomImage: {
+    width: "100%",
+    height: 400,
+    resizeMode: "cover",
+  },
+  randomText: {
+    padding: 24,
+    fontWeight: "600",
+    fontSize: 18,
+    backgroundColor: "white",
   },
 });

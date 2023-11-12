@@ -12,6 +12,7 @@ import Signup from "./Screens/Signup";
 import Home from "./Screens/Home";
 import MainLayout from "./Screens/MainLayout";
 import CategoryScreen from "./Screens/CategoryScreen";
+import MealDetails from "./Screens/MealDetails";
 
 export default function App() {
   return (
@@ -47,6 +48,11 @@ export default function App() {
           <Stack.Screen
             name="CategoryScreen"
             component={CategoryScreen}
+            options={{ headerShown: false, animation: "fade_from_bottom" }}
+          />
+          <Stack.Screen
+            name="MealDetails"
+            component={MealDetails}
             options={{ headerShown: false, animation: "fade_from_bottom" }}
           />
         </Stack.Navigator>
