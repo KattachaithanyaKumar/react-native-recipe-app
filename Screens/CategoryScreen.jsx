@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import Loader from "../Components/Loader";
 
 const CategoryScreen = ({ route }) => {
   const [categoryName, setCategoryName] = useState(
@@ -39,31 +40,32 @@ const CategoryScreen = ({ route }) => {
       style={styles.item}
       onPress={() => {
         console.log(item.strMeal);
-        navigation.navigate("MealDetails", { mealID: item.idMeal });
+        navigation.navigate("MealDetails", {
+          mealID: item.idMeal,
+          image: item.strMealThumb,
+        });
       }}
     >
       <Image source={{ uri: item.strMealThumb }} style={styles.image} />
-      {/* <Text style={styles.text}>{item.strMeal}</Text> */}
     </Pressable>
   );
 
-  //   console.log(categoryName);
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.title}>{categoryName}</Text>
-      {loading ? (
-        <Text style={styles.loading}>Loading...</Text>
-      ) : (
-        <View style={styles.list}>
-          <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.idMeal}
-            numColumns={2}
-            style={styles.flatList}
-          />
-        </View>
-      )}
+      <View style={styles.list}>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.idMeal}
+          numColumns={2}
+          style={styles.flatList}
+        />
+      </View>
     </SafeAreaView>
   );
 };

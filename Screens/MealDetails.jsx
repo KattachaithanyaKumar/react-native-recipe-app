@@ -8,11 +8,17 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
+const img = require("../assets/taxi-ufo-middle.gif");
 
 const MealDetails = ({ route }) => {
   const [meal, setMeal] = useState([]);
   const [mealImage, setMealImage] = useState("");
   const [ingredients, setIngredients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [bookmark, setBookmark] = useState(false);
+  const bgImage = route.params.image;
 
   const transformData = (data) => {
     const ingre = [];
@@ -27,12 +33,11 @@ const MealDetails = ({ route }) => {
         });
       }
     }
-
-    // console.log(ingre);
     return ingre;
   };
 
   const fetchMeal = async () => {
+    setLoading(true);
     const res = await fetch(
       `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${route.params.mealID}`
     );
@@ -41,7 +46,7 @@ const MealDetails = ({ route }) => {
     setMeal(data.meals[0]);
     setMealImage(data.meals[0].strMealThumb);
     setIngredients(transformData(data.meals[0]));
-    // console.log("ingre: ", ingredients);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -49,52 +54,79 @@ const MealDetails = ({ route }) => {
   }, []);
 
   const handleYoutube = (url) => {
-    console.log(url);
     Linking.openURL(url);
+  };
+
+  const handleBookmark = () => {
+    if (!loading) {
+      setBookmark(!bookmark);
+    }
   };
 
   return (
     <View style={styles.screen}>
-      {mealImage && <Image source={{ uri: mealImage }} style={styles.image} />}
+      <Image source={{ uri: bgImage }} style={styles.image} />
+      <Pressable style={styles.bookmark} onPress={handleBookmark}>
+        {bookmark ? (
+          <Ionicons name="bookmark" size={30} />
+        ) : (
+          <Ionicons name="bookmark-outline" size={30} />
+        )}
+      </Pressable>
       <ScrollView style={styles.details}>
-        <Text style={styles.title}>{meal?.strMeal}</Text>
-        <View style={styles.tags}>
-          <Text style={styles.tagText}>{meal?.strCategory}</Text>
-          <Text>•</Text>
-          <Text style={styles.tagText}>{meal?.strArea}</Text>
-          <Text>•</Text>
-          <Text style={styles.tagText}>
-            {meal.strTags ? meal.strTags : "No Tags"}
-          </Text>
-        </View>
-
-        <View>
-          <Text style={styles.subHeading}>Ingredients</Text>
-          {ingredients ? (
-            <View>
-              {ingredients.map((item, index) => (
-                <View key={index} style={styles.ingredientsList}>
-                  <Text>• {item?.name}</Text>
-                  <Text>{item?.measure}</Text>
-                </View>
-              ))}
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={img}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: "contain",
+                marginTop: 100,
+              }}
+            />
+          </View>
+        ) : (
+          <>
+            <Text style={styles.title}>{meal?.strMeal}</Text>
+            <View style={styles.tags}>
+              <Text style={styles.tagText}>{meal?.strCategory}</Text>
+              <Text>•</Text>
+              <Text style={styles.tagText}>{meal?.strArea}</Text>
+              <Text>•</Text>
+              <Text style={styles.tagText}>
+                {meal.strTags ? meal.strTags : "No Tags"}
+              </Text>
             </View>
-          ) : (
-            <Text>loading</Text>
-          )}
-        </View>
-
-        <View>
-          <Text style={styles.subHeading}>Instructions</Text>
-          <Text style={styles.instructions}>{meal?.strInstructions}</Text>
-        </View>
-
-        <Pressable
-          style={styles.button}
-          onPress={() => handleYoutube(meal.strYoutube)}
-        >
-          <Text style={styles.buttonText}>Watch video</Text>
-        </Pressable>
+            <View>
+              <Text style={styles.subHeading}>Ingredients</Text>
+              <View>
+                {ingredients.map((item, index) => (
+                  <View key={index} style={styles.ingredientsList}>
+                    <Text>• {item?.name}</Text>
+                    <Text>{item?.measure}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+            <View>
+              <Text style={styles.subHeading}>Instructions</Text>
+              <Text style={styles.instructions}>{meal?.strInstructions}</Text>
+            </View>
+            <Pressable
+              style={styles.button}
+              onPress={() => handleYoutube(meal.strYoutube)}
+            >
+              <Text style={styles.buttonText}>Watch video</Text>
+            </Pressable>
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -105,6 +137,14 @@ export default MealDetails;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  bookmark: {
+    position: "absolute",
+    top: 50,
+    right: 30,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 30,
   },
   image: {
     width: "100%",

@@ -13,25 +13,27 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 
 import CategoryCard from "../Components/CategoryCard";
+import Loader from "../Components/Loader";
 
 const Home = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [randomLoading, setRandomLoading] = useState(true);
   const [randomMeal, setRandomMeal] = useState([]);
 
   const navigation = useNavigation();
 
   const fetchCategories = async () => {
     try {
-      setLoading(true);
+      setCategoriesLoading(true);
       console.clear();
       const res = await fetch(
         "https://www.themealdb.com/api/json/v1/1/categories.php"
       );
       const data = await res.json();
       setCategoriesData(data.categories);
-      // console.log(data.categories);
-      setLoading(false);
+      setCategoriesLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -39,14 +41,13 @@ const Home = () => {
 
   const fetchRandomMeal = async () => {
     try {
-      setLoading(true);
+      setRandomLoading(true);
       const res = await fetch(
         "https://www.themealdb.com/api/json/v1/1/random.php"
       );
       const data = await res.json();
-      // console.log(data.meals);
       setRandomMeal(data.meals);
-      setLoading(false);
+      setRandomLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -60,6 +61,10 @@ const Home = () => {
   const handlePressEnter = () => {
     console.log("Press Enter");
   };
+
+  if (categoriesLoading && randomLoading) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -80,22 +85,18 @@ const Home = () => {
         </View>
 
         <Text style={styles.subheading}>Popular Categories</Text>
-        {loading ? (
-          <Text style={styles.loading}>Loading...</Text>
-        ) : (
-          <ScrollView horizontal style={styles.categoriesList}>
-            {categoriesData?.map((category, index) => (
-              <Pressable
-                key={index}
-                onPress={() => {
-                  navigation.navigate("CategoryScreen", { category });
-                }}
-              >
-                <CategoryCard data={category} />
-              </Pressable>
-            ))}
-          </ScrollView>
-        )}
+        <ScrollView horizontal style={styles.categoriesList}>
+          {categoriesData?.map((category, index) => (
+            <Pressable
+              key={index}
+              onPress={() => {
+                navigation.navigate("CategoryScreen", { category });
+              }}
+            >
+              <CategoryCard data={category} />
+            </Pressable>
+          ))}
+        </ScrollView>
 
         <Text style={styles.subheading}>Random Meal</Text>
         <View>
@@ -104,7 +105,10 @@ const Home = () => {
               key={index}
               style={styles.randomMeal}
               onPress={() => {
-                navigation.navigate("MealDetails", { mealID: meal.idMeal });
+                navigation.navigate("MealDetails", {
+                  mealID: meal.idMeal,
+                  image: meal.strMealThumb,
+                });
               }}
             >
               <Image
