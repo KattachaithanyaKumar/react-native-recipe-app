@@ -21,14 +21,18 @@ const CategoryScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const fetchData = async () => {
-    setLoading(true);
-    const res = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`
-    );
-    const data = await res.json();
-    console.log(data);
-    setData(data.meals);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`
+      );
+      const data = await res.json();
+      console.log(data);
+      setData(data.meals);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching the meals: ", err);
+    }
   };
 
   useEffect(() => {
@@ -84,7 +88,6 @@ const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 8,
     overflow: "hidden",
-    // backgroundColor: "white",
     aspectRatio: 0.75,
   },
   image: {

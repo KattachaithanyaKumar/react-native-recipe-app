@@ -7,13 +7,15 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import CategoryCard from "../Components/CategoryCard";
 import Loader from "../Components/Loader";
+
+const img = require("../assets/taxi-delivery-3.gif");
 
 const Home = () => {
   const [categoriesData, setCategoriesData] = useState([]);
@@ -35,12 +37,13 @@ const Home = () => {
       setCategoriesData(data.categories);
       setCategoriesLoading(false);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching meal categories: ", err);
     }
   };
 
   const fetchRandomMeal = async () => {
     try {
+      setLoading(true);
       setRandomLoading(true);
       const res = await fetch(
         "https://www.themealdb.com/api/json/v1/1/random.php"
@@ -48,8 +51,9 @@ const Home = () => {
       const data = await res.json();
       setRandomMeal(data.meals);
       setRandomLoading(false);
+      setLoading(false);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching random meal: ", err);
     }
   };
 
@@ -57,6 +61,12 @@ const Home = () => {
     fetchCategories();
     fetchRandomMeal();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchRandomMeal();
+    }, [])
+  );
 
   const handlePressEnter = () => {
     console.log("Press Enter");
@@ -111,11 +121,33 @@ const Home = () => {
                 });
               }}
             >
-              <Image
-                source={{ uri: meal.strMealThumb }}
-                style={styles.randomImage}
-              />
-              <Text style={styles.randomText}>{meal.strMeal}</Text>
+              {loading ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 24,
+                  }}
+                >
+                  <Image
+                    source={img}
+                    style={{
+                      width: 200,
+                      height: 200,
+                      resizeMode: "contain",
+                    }}
+                  />
+                </View>
+              ) : (
+                <>
+                  <Image
+                    source={{ uri: meal.strMealThumb }}
+                    style={styles.randomImage}
+                  />
+                  <Text style={styles.randomText}>{meal.strMeal}</Text>
+                </>
+              )}
             </Pressable>
           ))}
         </View>
@@ -130,6 +162,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "white",
+    resizeMode: "cover",
   },
   lottie: {
     width: 100,
@@ -168,8 +201,6 @@ const styles = StyleSheet.create({
   categoriesList: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    // padding: 32,
-    // backgroundColor: "red",
   },
   loading: {
     textAlign: "center",
@@ -179,11 +210,11 @@ const styles = StyleSheet.create({
   },
   randomMeal: {
     margin: 24,
-    marginTop: 12,
+    marginTop: 24,
     borderRadius: 24,
     backgroundColor: "white",
     overflow: "hidden",
-    marginBottom: 160,
+    marginBottom: 124,
     elevation: 3,
   },
   randomImage: {
@@ -196,5 +227,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 18,
     backgroundColor: "white",
+    color: "#724502",
   },
 });

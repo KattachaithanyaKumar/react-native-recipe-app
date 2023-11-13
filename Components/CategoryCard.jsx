@@ -14,10 +14,6 @@ export default CategoryCard;
 
 const styles = StyleSheet.create({
   card: {
-    // marginRight: 24,
-    // backgroundColor: "#EEAF0E",
-    // borderColor: "#eeaf0e",
-    // borderWidth: 1,
     backgroundColor: "white",
     alignItems: "center",
     padding: 12,
@@ -33,5 +29,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "400",
+    color: "#724502",
   },
 });

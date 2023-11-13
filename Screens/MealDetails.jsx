@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const img = require("../assets/taxi-ufo-middle.gif");
+const img = require("../assets/taxi-delivery-3.gif");
 
 const MealDetails = ({ route }) => {
   const [meal, setMeal] = useState([]);
@@ -37,16 +37,19 @@ const MealDetails = ({ route }) => {
   };
 
   const fetchMeal = async () => {
-    setLoading(true);
-    const res = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${route.params.mealID}`
-    );
-    const data = await res.json();
-    // console.log(data.meals[0]);
-    setMeal(data.meals[0]);
-    setMealImage(data.meals[0].strMealThumb);
-    setIngredients(transformData(data.meals[0]));
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${route.params.mealID}`
+      );
+      const data = await res.json();
+      setMeal(data.meals[0]);
+      setMealImage(data.meals[0].strMealThumb);
+      setIngredients(transformData(data.meals[0]));
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching the meal details: ", err);
+    }
   };
 
   useEffect(() => {
@@ -54,7 +57,9 @@ const MealDetails = ({ route }) => {
   }, []);
 
   const handleYoutube = (url) => {
-    Linking.openURL(url);
+    Linking.openURL(url).catch((err) =>
+      console.error("Error opening youtube url: ", err.message)
+    );
   };
 
   const handleBookmark = () => {
@@ -70,7 +75,7 @@ const MealDetails = ({ route }) => {
         {bookmark ? (
           <Ionicons name="bookmark" size={30} />
         ) : (
-          <Ionicons name="bookmark-outline" size={30} />
+          <Ionicons name="bookmark-outline" size={24} />
         )}
       </Pressable>
       <ScrollView style={styles.details}>
@@ -151,13 +156,12 @@ const styles = StyleSheet.create({
     height: 300,
   },
   details: {
-    flex: 1,
     backgroundColor: "white",
     padding: 24,
-    position: "relative",
-    top: -20,
+    marginTop: -30,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
+    elevation: 5,
   },
   title: {
     color: "#724502",
@@ -185,8 +189,6 @@ const styles = StyleSheet.create({
   },
   instructions: {
     marginTop: 12,
-    // backgroundColor: "red",
-    // marginBottom: 24,
   },
   button: {
     backgroundColor: "#eeaf0e",
