@@ -1,12 +1,4 @@
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, Pressable, View } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";

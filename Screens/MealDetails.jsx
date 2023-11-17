@@ -9,17 +9,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { FieldValue } from "firebase/firestore";
 
 const img = require("../assets/taxi-gears.gif");
 

@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View, Pressable } from "react-native";
 import React, { useState } from "react";
 
 import { auth } from "../firebase";

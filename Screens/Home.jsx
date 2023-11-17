@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
@@ -67,10 +66,6 @@ const Home = () => {
       fetchRandomMeal();
     }, [])
   );
-
-  const handlePressEnter = () => {
-    console.log("Press Enter");
-  };
 
   const handlePressSearch = () => {
     navigation.navigate("Search");

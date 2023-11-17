@@ -1,10 +1,16 @@
-import { StyleSheet, View, TextInput, ScrollView, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  ScrollView,
+  Text,
+  Image,
+  Pressable,
+} from "react-native";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
-import { Image } from "react-native";
-import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const load = require("../assets/taxi-gears.gif");

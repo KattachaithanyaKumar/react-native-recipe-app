@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  Pressable,
+} from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native";
-import { Image } from "react-native";
-import { Pressable } from "react-native";
-
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const load = require("../assets/taxi-gears.gif");
