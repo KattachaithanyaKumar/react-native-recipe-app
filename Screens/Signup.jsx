@@ -6,37 +6,82 @@ import {
   View,
   Pressable,
 } from "react-native";
-import React from "react";
-import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
+import { useNavigation } from "@react-navigation/native";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repassword, setRePassword] = useState("");
+
+  const navigation = useNavigation();
+
+  const clear = () => {
+    setEmail("");
+    setPassword("");
+    setRePassword("");
+  };
+
+  const register = () => {
+    if (password == repassword) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {
+          const user = userCredentials.user;
+          console.log("registered user: ", user);
+          clear();
+          navigation.navigate("Login");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      alert("Passwords does not match");
+    }
+  };
+
   return (
     <View style={styles.screen}>
-      {/* <StatusBar style="dark" /> */}
       <View style={styles.titleText}>
         <Text style={styles.title}>Welcome!</Text>
         <Text style={styles.desc}>Please enter your account here</Text>
       </View>
       <View style={styles.inputs}>
-        <TextInput placeholder="Email" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={styles.input}
+        />
         <TextInput
           placeholder="password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           secureTextEntry
           style={styles.input}
         />
         <TextInput
           placeholder="re-enter password"
+          value={repassword}
+          onChangeText={(text) => setRePassword(text)}
           secureTextEntry
           style={styles.input}
         />
       </View>
       <View style={styles.actions}>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={register}>
           <Text style={styles.buttonText}>SignUp</Text>
         </Pressable>
         <View style={styles.goto}>
           <Text style={styles.gotoText}>Already have an account?</Text>
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+          >
             <Text>Login</Text>
           </Pressable>
         </View>

@@ -7,14 +7,27 @@ import {
   Pressable,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
-    navigation.navigate("MainLayout");
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        console.log("login success");
+        navigation.navigate("MainLayout");
+      })
+      .catch((err) => {
+        // console.error("login error", err);
+        alert("Login Failed", "Invalid email or password. Please try again.");
+      });
   };
 
   const HandleSignupPress = () => {
@@ -29,10 +42,17 @@ const Login = () => {
         <Text style={styles.desc}>Please enter your account here</Text>
       </View>
       <View style={styles.inputs}>
-        <TextInput placeholder="Email" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={styles.input}
+        />
         <TextInput
           placeholder="password"
           secureTextEntry
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           style={styles.input}
         />
       </View>

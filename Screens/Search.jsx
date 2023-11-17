@@ -4,8 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "react-native";
+import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const load = require("../assets/taxi-gears.gif");
+const empty = require("../assets/taxi-29.gif");
 
 const Search = () => {
   const [name, setName] = useState("");
@@ -13,10 +16,12 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
 
+  const navigation = useNavigation();
+
   useFocusEffect(
     useCallback(() => {
       const focusTextInput = () => {
-        if (inputRef.current) {
+        if (inputRef.current && name === "") {
           inputRef.current.focus();
         }
       };
@@ -61,23 +66,46 @@ const Search = () => {
             <Image source={load} style={styles.loadingImage} />
           </View>
         ) : (
-          <ScrollView style={styles.resultBox}>
-            {meals == null ? (
-              <Text>Invaid Input</Text>
+          <>
+            {name == "" ? (
+              <View style={styles.loadingScreen}>
+                <Text>Nothing yet</Text>
+                <Image source={empty} style={styles.loadingImage} />
+              </View>
             ) : (
-              <>
-                {meals.map((meal, i) => (
-                  <View key={i}>
-                    <Image
-                      source={{ uri: meal.strMealThumb }}
-                      style={styles.image}
-                    />
-                    <Text>{meal.strMeal}</Text>
+              <ScrollView style={styles.resultBox}>
+                {meals == null ? (
+                  <View style={styles.loadingScreen}>
+                    <Text>Invalid Input</Text>
+                    <Image source={empty} style={styles.loadingImage} />
                   </View>
-                ))}
-              </>
+                ) : (
+                  <>
+                    {meals.map((meal, i) => (
+                      <Pressable
+                        key={i}
+                        style={styles.card}
+                        onPress={() => {
+                          navigation.navigate("MealDetails", {
+                            mealID: meal?.idMeal,
+                            image: meal?.strMealThumb,
+                          });
+                        }}
+                      >
+                        <Image
+                          source={{ uri: meal.strMealThumb }}
+                          style={styles.image}
+                        />
+                        <Text style={styles.cardText}>{meal.strMeal}</Text>
+                      </Pressable>
+                    ))}
+                    <View style={styles.blank}></View>
+                  </>
+                )}
+                <View style={styles.blank}></View>
+              </ScrollView>
             )}
-          </ScrollView>
+          </>
         )}
       </>
     </SafeAreaView>
@@ -108,8 +136,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   resultBox: {
-    // backgroundColor: "red",
-    // flex: 1,
     marginTop: 24,
   },
   image: {
@@ -125,5 +151,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  blank: {
+    height: 48,
+  },
+  image: {
+    width: "100%",
+    height: 200,
+  },
+  card: {
+    marginVertical: 12,
+    elevation: 5,
+    backgroundColor: "white",
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  cardText: {
+    padding: 12,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#724502",
   },
 });

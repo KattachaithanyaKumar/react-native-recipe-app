@@ -9,6 +9,17 @@ import {
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { FieldValue } from "firebase/firestore";
 
 const img = require("../assets/taxi-gears.gif");
 
@@ -17,8 +28,10 @@ const MealDetails = ({ route }) => {
   const [mealImage, setMealImage] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [bookmark, setBookmark] = useState(false);
+  const [bookmark, setBookmark] = useState(route.params.bookmark);
   const bgImage = route.params.image;
+
+  // console.log("route:", route);
 
   const transformData = (data) => {
     const ingre = [];
@@ -62,9 +75,37 @@ const MealDetails = ({ route }) => {
     );
   };
 
-  const handleBookmark = () => {
+  const handleBookmark = async () => {
+    setBookmark(!bookmark);
     if (!loading) {
-      setBookmark(!bookmark);
+      try {
+        const user = auth.currentUser;
+        const userId = user.uid;
+
+        const recipeRef = doc(
+          db,
+          "bookmarks",
+          userId,
+          "recipes",
+          route.params.mealID
+        );
+        const recipeSnapshot = await getDoc(recipeRef);
+
+        if (recipeSnapshot.exists()) {
+          await deleteDoc(recipeRef);
+          setBookmark(false);
+        } else {
+          await setDoc(recipeRef, {
+            image: route.params.image,
+            name: meal?.strMeal,
+          });
+          setBookmark(true);
+        }
+
+        // setBookmark(!bookmark);
+      } catch (error) {
+        console.error("Error updating bookmarks:", error);
+      }
     }
   };
 
@@ -73,7 +114,7 @@ const MealDetails = ({ route }) => {
       <Image source={{ uri: bgImage }} style={styles.image} />
       <Pressable style={styles.bookmark} onPress={handleBookmark}>
         {bookmark ? (
-          <Ionicons name="bookmark" size={30} />
+          <Ionicons name="bookmark" size={24} />
         ) : (
           <Ionicons name="bookmark-outline" size={24} />
         )}

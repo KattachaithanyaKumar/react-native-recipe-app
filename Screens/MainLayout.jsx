@@ -77,9 +77,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
-
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: "red",
-  },
-});
