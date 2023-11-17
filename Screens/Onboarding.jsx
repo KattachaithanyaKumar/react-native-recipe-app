@@ -21,7 +21,6 @@ const Onboarding = () => {
 
   return (
     <View style={styles.screen}>
-      {/* <StatusBar style="light" /> */}
       <ImageBackground source={img} style={styles.bg}>
         <Text style={styles.heading}>Start Cooking</Text>
         <Text style={styles.para}>

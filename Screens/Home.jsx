@@ -15,7 +15,7 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import CategoryCard from "../Components/CategoryCard";
 import Loader from "../Components/Loader";
 
-const img = require("../assets/taxi-delivery-3.gif");
+const img = require("../assets/taxi-gears.gif");
 
 const Home = () => {
   const [categoriesData, setCategoriesData] = useState([]);
@@ -72,6 +72,10 @@ const Home = () => {
     console.log("Press Enter");
   };
 
+  const handlePressSearch = () => {
+    navigation.navigate("Search");
+  };
+
   if (categoriesLoading && randomLoading) {
     return <Loader />;
   }
@@ -84,14 +88,10 @@ const Home = () => {
             Find <Text style={styles.titleYellow}>best recipes </Text>
           </Text>
           <Text style={styles.title}>for cooking </Text>
-          <View style={styles.searchBox}>
+          <Pressable style={styles.searchBox} onPress={handlePressSearch}>
             <Ionicons name="search" size={24} color={"#EEAF0E"} />
-            <TextInput
-              placeholder="Search"
-              style={styles.input}
-              onSubmitEditing={handlePressEnter}
-            />
-          </View>
+            <Text style={styles.input}>Search</Text>
+          </Pressable>
         </View>
 
         <Text style={styles.subheading}>Popular Categories</Text>

@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const img = require("../assets/taxi-delivery-3.gif");
+const img = require("../assets/taxi-gears.gif");
 
 const MealDetails = ({ route }) => {
   const [meal, setMeal] = useState([]);
