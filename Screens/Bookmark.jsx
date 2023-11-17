@@ -6,7 +6,7 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { collection, getDocs, query } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -48,12 +48,10 @@ const Bookmark = () => {
     useCallback(() => {
       fetchBookmarkedRecipes().then((recipes) => {
         setBookmarkedRecipes(recipes);
-        console.log("Bookmarked recipes", recipes);
+        // console.log("Bookmarked recipes", recipes);
       });
     }, [])
   );
-  // useEffect(() => {
-  // }, []);
 
   return (
     <SafeAreaView style={styles.screen}>

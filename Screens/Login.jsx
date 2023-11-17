@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TextInput, Pressable, View } from "react-native";
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -9,6 +9,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log(auth.currentUser);
+
+      if (auth.currentUser != null) {
+        navigation.navigate("MainLayout");
+      }
+    }, [])
+  );
 
   const handleLoginPress = () => {
     signInWithEmailAndPassword(auth, email, password)

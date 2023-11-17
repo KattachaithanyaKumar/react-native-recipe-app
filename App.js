@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LogBox } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,8 +14,13 @@ import Home from "./Screens/Home";
 import MainLayout from "./Screens/MainLayout";
 import CategoryScreen from "./Screens/CategoryScreen";
 import MealDetails from "./Screens/MealDetails";
+import { useEffect } from "react";
 
 export default function App() {
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
